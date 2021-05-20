@@ -63,9 +63,7 @@ function chk_cnt() {
 	chk_cnt DB_Dump "${DBK_CNT2}"
 	chk_cnt STORAGE_System "${SBK_CNT}"
 
-	
 }>|"${LOG}"
-
 
 ## 텔레그램으로 레포트 메세지를 보냄
 "${PUSH}}" "${HOST}" "$(/usr/bin/cat "${LOG}")"
