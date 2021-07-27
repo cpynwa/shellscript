@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## 변수설정
-HOST="$(/usr/bin/hostname)"
+HOST="$(/bin/hostname)"
 LOG="/tmp/backup.log"
 PUSH="/root/SHELL/monitor/tel_push.sh"
 DATE="$(/bin/date +%Y.%m.%d)"
@@ -18,7 +18,7 @@ DB_BAK_PATH="/root/SHELL/BACKUP/xtrabackup_backupfiles"
 DB_BAK_FILE="${BAK_PATH}/${DATE}_${HOST}_DB.tgz"
 
 ## 스토리지에 마운트
-/usr/bin/mount /mnt
+/bin/mount /mnt
 
 ## 로그파일생성
 /usr/bin/touch "${LOG}"
@@ -30,7 +30,7 @@ then
 	/bin/echo "백업 디렉토리가 있습니다. 문제없음."
 else
 	# 백업 디렉토리가 업으면 생성
-	/usr/bin/mkdir -p "${BAK_PATH}"
+	/bin/mkdir -p "${BAK_PATH}"
 fi
 
 ## --- 로그기록시작
@@ -59,25 +59,25 @@ fi
 			--prepare \
 			--target-dir="${DB_BAK_PATH}"
 	# p:퍼미션유지 P:절대경로유지
-	/usr/bin/tar czpPf "{BAK_FILE}" ${BAK_LIST}
+  /bin/tar czpPf "${BAK_FILE}" ${BAK_LIST}
 	# DB백업 디렉토리 압축
-	/usr/bin/tar czpPf "{DB_BAK_FILE}" ${DB_BAK_PATH}
+  /bin/tar czpPf "${DB_BAK_FILE}" ${DB_BAK_PATH}
 	
 	# 백업파일 정보
-	NAME="$(/usr/bin/ls -al "${BAK_FILE}" | awk '{print $9}')"
-	SIZE="$(/usr/bin/ls -al "${BAK_FILE}" | awk '{print $5}')"
+	NAME="$(/bin/ls -al "${BAK_FILE}" | awk '{print $9}')"
+	SIZE="$(/bin/ls -al "${BAK_FILE}" | awk '{print $5}')"
 	/bin/echo "=== 백업 파일 정보 :"
 	/bin/echo " | 파일명 : ${NAME}"
 	/bin/echo " | 파일크기 : ${SIZE}"
-	/bib/echo
+	/bin/echo
 	
 	# DB백업파일 정보
-	NAME="$(/usr/bin/ls -al "${DB_BAK_FILE}" | awk '{print $9}')"
-	SIZE="$(/usr/bin/ls -al "${DB_BAK_FILE}" | awk '{print $5}')"
+	NAME="$(/bin/ls -al "${DB_BAK_FILE}" | awk '{print $9}')"
+	SIZE="$(/bin/ls -al "${DB_BAK_FILE}" | awk '{print $5}')"
 	/bin/echo "=== 백업 파일 정보 :"
 	/bin/echo " | 파일명 : ${NAME}"
 	/bin/echo " | 파일크기 : ${SIZE}"
-	/bib/echo
+	/bin/echo
 	
 	# 백업종료시각
 	/bin/echo
@@ -89,10 +89,10 @@ fi
 ## ---로그기록 끝
 
 ## 스토리지에 언마운트
-/usr/bin/umount /mnt
+/bin/umount /mnt
 
 ## 텔레그램으로 백업 로그를 전송
-"${PUSH}" "${HOST" "$(/usr/bin/cat "${LOG}")"
+"${PUSH}" "${HOST}" "$(/bin/cat "${LOG}")"
 
 ## 로그파일 및 데이터베이스백업파일 삭제
-/usr/bin/rm -rf "${LOG}" "${DB_BAK_PATH}"
+/bin/rm -rf "${LOG}" "${DB_BAK_PATH}"
